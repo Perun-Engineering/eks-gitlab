@@ -14,6 +14,7 @@ args:
     ]
   }
 EOF
+  bucket_prefix        = "gitlab-mycompany"
 }
 
 module "gitlab" {
@@ -31,6 +32,7 @@ module "gitlab" {
     "gitlab-omniauth-saml" = local.saml_google_provider
   }
 
+  bucket_prefix = local.bucket_prefix
   buckets_lifecycles = {
     artifacts = <<EOF
 {
@@ -71,7 +73,7 @@ EOF
       redis_host        = "master.gitlab.xxxxxx.euc1.cache.amazonaws.com"
       redis_port        = "6379"
       release_name      = "gitlab"
-      bucket_prefix     = "gitlab-mycompany"
+      bucket_prefix     = local.bucket_prefix
       domain            = "example.com"
       smtp_address      = "smtp.gmail.com"
     })
