@@ -105,6 +105,22 @@ resource "kubernetes_secret" "ldap" {
   type = "Opaque"
 }
 
+resource "kubernetes_secret" "gitlab_registry_storage" {
+  metadata {
+    name      = "${var.release_name}-registry-storage"
+    namespace = local.release_namespace
+  }
+
+  data = {
+    config = <<EOF
+s3:
+  bucket: ${var.bucket_prefix}-registry
+  region: ${data.aws_region.current.name}
+  v4auth: true
+EOF
+  }
+}
+
 data "aws_iam_policy_document" "s3_bucket_policy" {
   for_each = local.buckets_list
 
