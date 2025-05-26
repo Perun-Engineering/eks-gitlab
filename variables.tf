@@ -76,6 +76,12 @@ variable "namespace_labels" {
   default     = {}
 }
 
+variable "bucket_prefix" {
+  description = "Prefix used for S3 buckets"
+  type        = string
+  default     = ""
+}
+
 variable "buckets_lifecycles" {
   description = "Lifecycle rules for buckets"
   type        = map(string)

@@ -105,6 +105,22 @@ resource "kubernetes_secret" "ldap" {
   type = "Opaque"
 }
 
+resource "kubernetes_secret" "gitlab_registry_storage" {
+  metadata {
+    name      = "${var.release_name}-registry-storage"
+    namespace = local.release_namespace
+  }
+
+  data = {
+    config = <<EOF
+s3:
+  bucket: ${var.bucket_prefix}-registry
+  region: ${data.aws_region.current.name}
+  v4auth: true
+EOF
+  }
+}
+
 data "aws_iam_policy_document" "s3_bucket_policy" {
   for_each = local.buckets_list
 
@@ -160,6 +176,28 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
       identifiers = [module.gitlab_role.iam_role_arn]
     }
     actions   = ["s3:GetObjectAcl"]
+    resources = ["arn:aws:s3:::${each.value}/*"]
+  }
+
+  statement {
+    sid    = "AllowListBucketMultipartUploads"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [module.gitlab_role.iam_role_arn]
+    }
+    actions   = ["s3:ListBucketMultipartUploads"]
+    resources = ["arn:aws:s3:::${each.value}"]
+  }
+
+  statement {
+    sid    = "AllowListMultipartUploadParts"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [module.gitlab_role.iam_role_arn]
+    }
+    actions   = ["s3:ListMultipartUploadParts"]
     resources = ["arn:aws:s3:::${each.value}/*"]
   }
 }

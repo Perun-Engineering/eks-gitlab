@@ -192,6 +192,9 @@ gitlab:
 registry:
   enabled: true
   bucket: ${bucket_prefix}-registry
+  storage:
+    secret: ${release_name}-registry-storage
+    key: config
   redis:
     cache:
       password:
