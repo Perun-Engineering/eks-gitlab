@@ -1,6 +1,7 @@
 locals {
   values     = yamldecode(var.values[0])
   app_config = local.values.global.appConfig
+  global     = local.values.global
 
   omniauth_providers = {
     for k, v in local.values.global.appConfig.omniauth.providers :
@@ -19,6 +20,12 @@ locals {
     if k == "registry"
   }
 
+  pages = {
+    for k, v in local.global :
+    k => v
+    if k == "pages"
+  }
+
   buckets_list = merge(
     {
       for k, v in local.buckets_app :
@@ -27,6 +34,10 @@ locals {
     {
       for k, v in local.registry :
       k => v.bucket if v.enabled == true
+    },
+    {
+      for k, v in local.pages :
+      k => v.objectStore.bucket if v.enabled == true
     },
     {
       backup : local.values.global.appConfig.backups.bucket
