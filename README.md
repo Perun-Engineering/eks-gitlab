@@ -28,7 +28,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.36.0 |
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.11.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.38.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.33.0 |
 
 ## Modules
 
@@ -49,6 +49,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 | [kubernetes_secret.ldap](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.postgres](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.redis](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
+| [kubernetes_secret.registry_postgres](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.smtp](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [aws_eks_cluster.eks](https://registry.terraform.io/providers/hashicorp/aws/5.36.0/docs/data-sources/eks_cluster) | data source |
 | [aws_iam_policy_document.s3_bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/5.36.0/docs/data-sources/iam_policy_document) | data source |
@@ -67,6 +68,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 | <a name="input_namespace_labels"></a> [namespace\_labels](#input\_namespace\_labels) | Labels for GitLab namespace | `map(string)` | `{}` | no |
 | <a name="input_omniauth_providers"></a> [omniauth\_providers](#input\_omniauth\_providers) | OmniAuth providers | `map(string)` | `{}` | no |
 | <a name="input_redis_password"></a> [redis\_password](#input\_redis\_password) | Password to access Redis database | `string` | n/a | yes |
+| <a name="input_registry_database_password"></a> [registry\_database\_password](#input\_registry\_database\_password) | Password to access Registry PostgreSQL database | `string` | n/a | yes |
 | <a name="input_release_max_history"></a> [release\_max\_history](#input\_release\_max\_history) | Maximum saved revisions per release | `number` | `10` | no |
 | <a name="input_release_name"></a> [release\_name](#input\_release\_name) | This is the name of the release which also used as a prefix or suffix for the resources | `string` | `"gitlab"` | no |
 | <a name="input_release_namespace"></a> [release\_namespace](#input\_release\_namespace) | Namespace name where you want to deploy the release. If empty, `release_name` will be used. | `string` | `""` | no |
