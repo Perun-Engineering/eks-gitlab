@@ -29,6 +29,12 @@ global:
     username: ${database_username}
     database: gitlab
 
+
+  # Mainly for backups, https://docs.gitlab.com/charts/charts/registry/#installation-parameters, https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1464
+  # https://gitlab.com/gitlab-org/gitlab/-/issues/532507
+  registry:
+    bucket: ${bucket_prefix}-registry
+
   redis:
     host: ${redis_host}
     port: ${redis_port}
