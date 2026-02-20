@@ -68,7 +68,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 | <a name="input_namespace_labels"></a> [namespace\_labels](#input\_namespace\_labels) | Labels for GitLab namespace | `map(string)` | `{}` | no |
 | <a name="input_omniauth_providers"></a> [omniauth\_providers](#input\_omniauth\_providers) | OmniAuth providers | `map(string)` | `{}` | no |
 | <a name="input_redis_password"></a> [redis\_password](#input\_redis\_password) | Password to access Redis database | `string` | n/a | yes |
-| <a name="input_registry_database_password"></a> [registry\_database\_password](#input\_registry\_database\_password) | Password to access Registry PostgreSQL database | `string` | n/a | yes |
+| <a name="input_registry_database_password"></a> [registry\_database\_password](#input\_registry\_database\_password) | Password to access Registry PostgreSQL database | `string` | `null` | no |
 | <a name="input_release_max_history"></a> [release\_max\_history](#input\_release\_max\_history) | Maximum saved revisions per release | `number` | `10` | no |
 | <a name="input_release_name"></a> [release\_name](#input\_release\_name) | This is the name of the release which also used as a prefix or suffix for the resources | `string` | `"gitlab"` | no |
 | <a name="input_release_namespace"></a> [release\_namespace](#input\_release\_namespace) | Namespace name where you want to deploy the release. If empty, `release_name` will be used. | `string` | `""` | no |

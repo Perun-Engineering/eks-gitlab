@@ -29,17 +29,17 @@ resource "kubernetes_secret" "postgres" {
 
 resource "kubernetes_secret" "registry_postgres" {
   # Optional, at this moment S3-only can be used https://docs.gitlab.com/administration/packages/container_registry_metadata_database/
-  count = var.registry_database_password ? 0 : 1
+  count = var.registry_database_password != null ? 1 : 0
   metadata {
     name      = "${var.release_name}-registry-postgresql-password"
     namespace = local.release_namespace
   }
 
   data = {
-    postgresql-password = var.registry_database_password
+    registry-postgresql-password = var.registry_database_password
     #We need below if we are going to deploy PostgreSQL next to the Gitlab in the EKS
     #not as RDS for PostgreSQL
-    postgresql-postgres-password = var.registry_database_password
+    registry-postgresql-postgres-password = var.registry_database_password
   }
 
   type = "Opaque"
