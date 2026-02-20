@@ -195,6 +195,16 @@ registry:
   storage:
     secret: ${release_name}-registry-storage
     key: config
+  database:
+    enabled: true
+    sslmode: require
+    host: ${database_host}
+    port: ${database_port}
+    user: ${registry_database_username}
+    name: gitlab_registry # if empty, defaults to `registry`
+    password:
+      secret: gitlab-registry-postgresql-password
+      key: registry-postgresql-password
   redis:
     cache:
       password:
