@@ -29,6 +29,12 @@ global:
     username: ${database_username}
     database: gitlab
 
+
+  # Mainly for backups, https://docs.gitlab.com/charts/charts/registry/#installation-parameters, https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1464
+  # https://gitlab.com/gitlab-org/gitlab/-/issues/532507
+  registry:
+    bucket: ${bucket_prefix}-registry
+
   redis:
     host: ${redis_host}
     port: ${redis_port}
@@ -195,6 +201,16 @@ registry:
   storage:
     secret: ${release_name}-registry-storage
     key: config
+  database:
+    enabled: true
+    sslmode: require
+    host: ${database_host}
+    port: ${database_port}
+    user: ${registry_database_username}
+    name: gitlab_registry # if empty, defaults to `registry`
+    password:
+      secret: gitlab-registry-postgresql-password
+      key: registry-postgresql-password
   redis:
     cache:
       password:

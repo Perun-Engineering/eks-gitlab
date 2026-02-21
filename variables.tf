@@ -39,6 +39,13 @@ variable "database_password" {
   sensitive   = true
 }
 
+variable "registry_database_password" {
+  type        = string
+  description = "Password to access Registry PostgreSQL database"
+  sensitive   = true
+  default     = null
+}
+
 variable "redis_password" {
   type        = string
   description = "Password to access Redis database"

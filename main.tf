@@ -4,14 +4,14 @@ locals {
 
 data "aws_region" "current" {}
 
-resource "kubernetes_namespace" "gitlab" {
+resource "kubernetes_namespace_v1" "gitlab" {
   metadata {
     name   = local.release_namespace
     labels = var.namespace_labels
   }
 }
 
-resource "kubernetes_secret" "postgres" {
+resource "kubernetes_secret_v1" "postgres" {
   metadata {
     name      = "${var.release_name}-postgresql-password"
     namespace = local.release_namespace
@@ -27,7 +27,25 @@ resource "kubernetes_secret" "postgres" {
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "redis" {
+resource "kubernetes_secret_v1" "registry_postgres" {
+  # Optional, at this moment S3-only can be used https://docs.gitlab.com/administration/packages/container_registry_metadata_database/
+  count = var.registry_database_password != null ? 1 : 0
+  metadata {
+    name      = "${var.release_name}-registry-postgresql-password"
+    namespace = local.release_namespace
+  }
+
+  data = {
+    registry-postgresql-password = var.registry_database_password
+    #We need below if we are going to deploy PostgreSQL next to the Gitlab in the EKS
+    #not as RDS for PostgreSQL
+    registry-postgresql-postgres-password = var.registry_database_password
+  }
+
+  type = "Opaque"
+}
+
+resource "kubernetes_secret_v1" "redis" {
   metadata {
     name      = "${var.release_name}-redis-password"
     namespace = local.release_namespace
@@ -40,7 +58,7 @@ resource "kubernetes_secret" "redis" {
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "smtp" {
+resource "kubernetes_secret_v1" "smtp" {
   #count = local.values.global.smtp.authentication == "false" ? 0 : 1
 
   metadata {
@@ -55,7 +73,7 @@ resource "kubernetes_secret" "smtp" {
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "gitlab_rails_storage" {
+resource "kubernetes_secret_v1" "gitlab_rails_storage" {
   metadata {
     name      = "${var.release_name}-rails-storage"
     namespace = local.release_namespace
@@ -64,12 +82,12 @@ resource "kubernetes_secret" "gitlab_rails_storage" {
   data = {
     connection = <<EOF
 provider: AWS
-region: ${data.aws_region.current.name}
+region: ${data.aws_region.current.id}
 use_iam_profile: true
 EOF
     config     = <<EOF
 [default]
-bucket_location = ${data.aws_region.current.name}
+bucket_location = ${data.aws_region.current.id}
 multipart_chunk_size_mb = 128
 EOF
   }
@@ -77,7 +95,7 @@ EOF
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "gitlab_omniauth_providers" {
+resource "kubernetes_secret_v1" "gitlab_omniauth_providers" {
   for_each = local.omniauth_providers
   metadata {
     name      = each.value
@@ -91,7 +109,7 @@ resource "kubernetes_secret" "gitlab_omniauth_providers" {
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "ldap" {
+resource "kubernetes_secret_v1" "ldap" {
   count = lookup(local.values.global.appConfig, "ldap", []) == [] ? 0 : 1
   metadata {
     name      = "${var.release_name}-ldap-password"
@@ -105,7 +123,7 @@ resource "kubernetes_secret" "ldap" {
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "gitlab_registry_storage" {
+resource "kubernetes_secret_v1" "gitlab_registry_storage" {
   metadata {
     name      = "${var.release_name}-registry-storage"
     namespace = local.release_namespace
@@ -115,7 +133,7 @@ resource "kubernetes_secret" "gitlab_registry_storage" {
     config = <<EOF
 s3:
   bucket: ${var.bucket_prefix}-registry
-  region: ${data.aws_region.current.name}
+  region: ${data.aws_region.current.id}
   v4auth: true
 EOF
   }
@@ -251,9 +269,9 @@ resource "helm_release" "gitlab" {
   }
 
   depends_on = [
-    kubernetes_secret.postgres,
-    kubernetes_secret.redis,
-    kubernetes_secret.gitlab_rails_storage,
+    kubernetes_secret_v1.postgres,
+    kubernetes_secret_v1.redis,
+    kubernetes_secret_v1.gitlab_rails_storage,
     module.gitlab_role
   ]
 }

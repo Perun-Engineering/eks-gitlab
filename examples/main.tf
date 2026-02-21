@@ -24,10 +24,11 @@ module "gitlab" {
   release_name         = "gitlab"
   gitlab_chart_version = "7.8.1"
 
-  database_password = "database_password"
-  redis_password    = "redis_password"
-  smtp_user         = "postfix"
-  smtp_password     = "smtp_password"
+  database_password          = "database_password"
+  registry_database_password = "registry_datatabase_password"
+  redis_password             = "redis_password"
+  smtp_user                  = "postfix"
+  smtp_password              = "smtp_password"
   omniauth_providers = {
     "gitlab-omniauth-saml" = local.saml_google_provider
   }
@@ -67,15 +68,16 @@ EOF
 
   values = [
     templatefile("values.yaml", {
-      database_host     = "gitlab.xxxxxxxxxxxx.eu-central-1.rds.amazonaws.com"
-      database_port     = "5432"
-      database_username = "postgres"
-      redis_host        = "master.gitlab.xxxxxx.euc1.cache.amazonaws.com"
-      redis_port        = "6379"
-      release_name      = "gitlab"
-      bucket_prefix     = local.bucket_prefix
-      domain            = "example.com"
-      smtp_address      = "smtp.gmail.com"
+      database_host              = "gitlab.xxxxxxxxxxxx.eu-central-1.rds.amazonaws.com"
+      database_port              = "5432"
+      database_username          = "postgres"
+      registry_database_username = "gitlab_registry"
+      redis_host                 = "master.gitlab.xxxxxx.euc1.cache.amazonaws.com"
+      redis_port                 = "6379"
+      release_name               = "gitlab"
+      bucket_prefix              = local.bucket_prefix
+      domain                     = "example.com"
+      smtp_address               = "smtp.gmail.com"
     })
   ]
 
