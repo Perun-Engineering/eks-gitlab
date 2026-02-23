@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.1.0...v0.2.0) (2026-02-23)
+
+
+### Features
+
+* Add ability to determine bucket versioning ([6c62091](https://github.com/Perun-Engineering/eks-gitlab/commit/6c620918c32f2cdd703ac6617ec0ff0929bc58c3))
+
 ## [0.1.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.0.9...v0.1.0) (2026-02-21)
 
 
