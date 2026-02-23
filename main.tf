@@ -230,7 +230,7 @@ module "s3_bucket" {
   force_destroy = false
 
   versioning = {
-    enabled = false
+    enabled = try(var.buckets_versioning[each.key], false)
   }
 
   policy        = data.aws_iam_policy_document.s3_bucket_policy[each.key].json

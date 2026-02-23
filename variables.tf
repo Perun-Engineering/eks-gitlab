@@ -95,6 +95,12 @@ variable "buckets_lifecycles" {
   default     = {}
 }
 
+variable "buckets_versioning" {
+  description = "Versioning for buckets"
+  type        = map(bool)
+  default     = {}
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
