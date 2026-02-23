@@ -65,6 +65,10 @@ EOF
 }
 EOF
   }
+  # Default is `false`, determine for each of backup, lfs, artifacts, packages, uploads etc
+  buckets_versioning = {
+    backup = true
+  }
 
   values = [
     templatefile("values.yaml", {
