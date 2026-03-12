@@ -28,7 +28,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.36.0 |
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.11.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 3.0.1 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.33.0 |
 
 ## Modules
 
@@ -80,5 +80,9 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_arn"></a> [arn](#output\_arn) | ARN of IAM role |
+| <a name="output_buckets"></a> [buckets](#output\_buckets) | List of buckets created |
+| <a name="output_name"></a> [name](#output\_name) | Name of IAM role |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
