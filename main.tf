@@ -276,15 +276,34 @@ resource "helm_release" "gitlab" {
   ]
 }
 
+module "gitlab_policy" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "v5.34.0"
+
+  name        = "gitlab-role-policy"
+  description = "Policy for GitLab role"
+  policy      = var.role_policy
+
+  tags = var.tags
+}
+
 module "gitlab_role" {
-  source                         = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                        = "v5.34.0"
-  create_role                    = true
-  allow_self_assume_role         = false
-  role_description               = "Gitlab Role to access S3"
-  role_name                      = "${var.release_name}-access-s3"
+  source                 = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                = "v5.34.0"
+  create_role            = true
+  allow_self_assume_role = false
+  role_description       = "Gitlab Role to access AWS resources"
+  role_name              = "${var.release_name}-${var.role_suffix}"
+  role_policy_arns = [
+    module.gitlab_policy.arn
+  ]
+
   provider_url                   = data.aws_eks_cluster.eks.identity[0].oidc[0].issuer
   oidc_subjects_with_wildcards   = ["system:serviceaccount:${local.release_namespace}:gitlab*"]
   oidc_fully_qualified_audiences = ["sts.amazonaws.com"]
   tags                           = var.tags
+
+  depends_on = [
+    module.gitlab_policy
+  ]
 }

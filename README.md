@@ -34,6 +34,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_gitlab_policy"></a> [gitlab\_policy](#module\_gitlab\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | v5.34.0 |
 | <a name="module_gitlab_role"></a> [gitlab\_role](#module\_gitlab\_role) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | v5.34.0 |
 | <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 4.1.0 |
 
@@ -73,6 +74,8 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 | <a name="input_release_max_history"></a> [release\_max\_history](#input\_release\_max\_history) | Maximum saved revisions per release | `number` | `10` | no |
 | <a name="input_release_name"></a> [release\_name](#input\_release\_name) | This is the name of the release which also used as a prefix or suffix for the resources | `string` | `"gitlab"` | no |
 | <a name="input_release_namespace"></a> [release\_namespace](#input\_release\_namespace) | Namespace name where you want to deploy the release. If empty, `release_name` will be used. | `string` | `""` | no |
+| <a name="input_role_policy"></a> [role\_policy](#input\_role\_policy) | Policy for GitLab role | `string` | `null` | no |
+| <a name="input_role_suffix"></a> [role\_suffix](#input\_role\_suffix) | Optional suffix for GitLab role | `string` | `"access-aws"` | no |
 | <a name="input_smtp_password"></a> [smtp\_password](#input\_smtp\_password) | SMTP Password | `string` | `""` | no |
 | <a name="input_smtp_user"></a> [smtp\_user](#input\_smtp\_user) | SMTP Username | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
@@ -82,7 +85,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 
 | Name | Description |
 |------|-------------|
-| <a name="output_arn"></a> [arn](#output\_arn) | ARN of IAM role |
 | <a name="output_buckets"></a> [buckets](#output\_buckets) | List of buckets created |
-| <a name="output_name"></a> [name](#output\_name) | Name of IAM role |
+| <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | ARN of IAM role |
+| <a name="output_role_name"></a> [role\_name](#output\_role\_name) | Name of IAM role |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
