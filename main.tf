@@ -291,9 +291,10 @@ module "gitlab_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "v6.4.0"
 
-  enable_oidc = true
-  name        = "${var.release_name}-${var.role_suffix}"
-  description = "Gitlab Role to access AWS resources"
+  enable_oidc     = true
+  name            = "${var.release_name}-${var.role_suffix}"
+  use_name_prefix = false
+  description     = "Gitlab Role to access AWS resources"
 
   oidc_provider_urls     = [data.aws_eks_cluster.eks.identity[0].oidc[0].issuer]
   oidc_wildcard_subjects = ["system:serviceaccount:${local.release_namespace}:gitlab*"]
