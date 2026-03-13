@@ -1,11 +1,11 @@
 output "role_name" {
   description = "Name of IAM role"
-  value       = module.gitlab_role.iam_role_name
+  value       = module.gitlab_role.arn
 }
 
 output "role_arn" {
   description = "ARN of IAM role"
-  value       = module.gitlab_role.iam_role_arn
+  value       = module.gitlab_role.arn
 
 }
 
