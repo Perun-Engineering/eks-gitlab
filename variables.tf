@@ -106,3 +106,16 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "role_policy" {
+  type        = string
+  description = "Policy for GitLab role"
+  sensitive   = true
+  default     = null
+}
+
+variable "role_suffix" {
+  type        = string
+  description = "Optional suffix for GitLab role"
+  default     = "access-aws"
+}

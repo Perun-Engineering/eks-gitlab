@@ -147,7 +147,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:ListBucket"]
     resources = ["arn:aws:s3:::${each.value}"]
@@ -158,7 +158,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:PutObject", "s3:GetObject"]
     resources = ["arn:aws:s3:::${each.value}/*"]
@@ -169,7 +169,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:DeleteObject"]
     resources = ["arn:aws:s3:::${each.value}/*"]
@@ -180,7 +180,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:PutObjectAcl"]
     resources = ["arn:aws:s3:::${each.value}/*"]
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:GetObjectAcl"]
     resources = ["arn:aws:s3:::${each.value}/*"]
@@ -202,7 +202,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:ListBucketMultipartUploads"]
     resources = ["arn:aws:s3:::${each.value}"]
@@ -213,7 +213,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [module.gitlab_role.iam_role_arn]
+      identifiers = [module.gitlab_role.arn]
     }
     actions   = ["s3:ListMultipartUploadParts"]
     resources = ["arn:aws:s3:::${each.value}/*"]
@@ -223,10 +223,9 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
 module "s3_bucket" {
   for_each = local.buckets_list
   source   = "terraform-aws-modules/s3-bucket/aws"
-  version  = "4.1.0"
+  version  = "5.10.0"
 
   bucket        = each.value
-  acl           = null
   force_destroy = false
 
   versioning = {
@@ -265,7 +264,7 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.gitlab_role.iam_role_arn
+    value = module.gitlab_role.arn
   }
 
   depends_on = [
@@ -276,15 +275,37 @@ resource "helm_release" "gitlab" {
   ]
 }
 
+module "gitlab_policy" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "v6.4.0"
+
+  name        = "gitlab-role-policy"
+  description = "Policy for GitLab role"
+  policy      = var.role_policy
+
+  tags = var.tags
+}
+
 module "gitlab_role" {
-  source                         = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                        = "v5.34.0"
-  create_role                    = true
-  allow_self_assume_role         = false
-  role_description               = "Gitlab Role to access S3"
-  role_name                      = "${var.release_name}-access-s3"
-  provider_url                   = data.aws_eks_cluster.eks.identity[0].oidc[0].issuer
-  oidc_subjects_with_wildcards   = ["system:serviceaccount:${local.release_namespace}:gitlab*"]
-  oidc_fully_qualified_audiences = ["sts.amazonaws.com"]
-  tags                           = var.tags
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "v6.4.0"
+
+  enable_oidc     = true
+  name            = "${var.release_name}-${var.role_suffix}"
+  use_name_prefix = false
+  description     = "Gitlab Role to access AWS resources"
+
+  oidc_provider_urls     = [data.aws_eks_cluster.eks.identity[0].oidc[0].issuer]
+  oidc_wildcard_subjects = ["system:serviceaccount:${local.release_namespace}:gitlab*"]
+  oidc_audiences         = ["sts.amazonaws.com"]
+
+  policies = {
+    gitlab-role-policy = module.gitlab_policy.arn
+  }
+
+  tags = var.tags
+
+  depends_on = [
+    module.gitlab_policy
+  ]
 }

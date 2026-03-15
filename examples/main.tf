@@ -40,7 +40,7 @@ module "gitlab" {
   "lifecycle_rule": [
     {
       "id": "log",
-      "enabled": true,
+      "status": "Enabled",
       "expiration": {
         "days": 30
       }
@@ -53,7 +53,7 @@ EOF
   "lifecycle_rule": [
     {
       "id": "log",
-      "enabled": true,
+      "status": "Enabled",
       "noncurrent_version_transition": [
         {
           "days": 30,

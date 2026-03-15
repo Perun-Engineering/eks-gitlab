@@ -10,13 +10,13 @@ This module was created to simplify deploying Gitlab into the EKS with storage o
 
 In the above diagram, you can see the components and their relations (PostgreSQL and Redis are not deployed with this module).
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 5.36.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.11.0 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | ~> 2.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.20 |
@@ -26,7 +26,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.36.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.36.0 |
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.11.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 3.0.1 |
 
@@ -34,8 +34,9 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gitlab_role"></a> [gitlab\_role](#module\_gitlab\_role) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | v5.34.0 |
-| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 4.1.0 |
+| <a name="module_gitlab_policy"></a> [gitlab\_policy](#module\_gitlab\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | v6.4.0 |
+| <a name="module_gitlab_role"></a> [gitlab\_role](#module\_gitlab\_role) | terraform-aws-modules/iam/aws//modules/iam-role | v6.4.0 |
+| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 5.10.0 |
 
 ## Resources
 
@@ -51,9 +52,9 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 | [kubernetes_secret_v1.redis](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret_v1) | resource |
 | [kubernetes_secret_v1.registry_postgres](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret_v1) | resource |
 | [kubernetes_secret_v1.smtp](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret_v1) | resource |
-| [aws_eks_cluster.eks](https://registry.terraform.io/providers/hashicorp/aws/5.36.0/docs/data-sources/eks_cluster) | data source |
-| [aws_iam_policy_document.s3_bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/5.36.0/docs/data-sources/iam_policy_document) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/5.36.0/docs/data-sources/region) | data source |
+| [aws_eks_cluster.eks](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
+| [aws_iam_policy_document.s3_bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
@@ -73,6 +74,8 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 | <a name="input_release_max_history"></a> [release\_max\_history](#input\_release\_max\_history) | Maximum saved revisions per release | `number` | `10` | no |
 | <a name="input_release_name"></a> [release\_name](#input\_release\_name) | This is the name of the release which also used as a prefix or suffix for the resources | `string` | `"gitlab"` | no |
 | <a name="input_release_namespace"></a> [release\_namespace](#input\_release\_namespace) | Namespace name where you want to deploy the release. If empty, `release_name` will be used. | `string` | `""` | no |
+| <a name="input_role_policy"></a> [role\_policy](#input\_role\_policy) | Policy for GitLab role | `string` | `null` | no |
+| <a name="input_role_suffix"></a> [role\_suffix](#input\_role\_suffix) | Optional suffix for GitLab role | `string` | `"access-aws"` | no |
 | <a name="input_smtp_password"></a> [smtp\_password](#input\_smtp\_password) | SMTP Password | `string` | `""` | no |
 | <a name="input_smtp_user"></a> [smtp\_user](#input\_smtp\_user) | SMTP Username | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
@@ -80,5 +83,9 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 
 ## Outputs
 
-No outputs.
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+| Name | Description |
+|------|-------------|
+| <a name="output_buckets"></a> [buckets](#output\_buckets) | List of buckets created |
+| <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | ARN of IAM role |
+| <a name="output_role_name"></a> [role\_name](#output\_role\_name) | Name of IAM role |
+<!-- END_TF_DOCS -->
