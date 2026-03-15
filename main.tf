@@ -223,10 +223,9 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
 module "s3_bucket" {
   for_each = local.buckets_list
   source   = "terraform-aws-modules/s3-bucket/aws"
-  version  = "4.1.0"
+  version  = "5.10.0"
 
   bucket        = each.value
-  acl           = null
   force_destroy = false
 
   versioning = {
@@ -298,7 +297,7 @@ module "gitlab_role" {
 
   oidc_provider_urls     = [data.aws_eks_cluster.eks.identity[0].oidc[0].issuer]
   oidc_wildcard_subjects = ["system:serviceaccount:${local.release_namespace}:gitlab*"]
-  oidc_audiences         = ["[sts.amazonaws.com](http://sts.amazonaws.com)"]
+  oidc_audiences         = ["sts.amazonaws.com"]
 
   policies = {
     gitlab-role-policy = module.gitlab_policy.arn

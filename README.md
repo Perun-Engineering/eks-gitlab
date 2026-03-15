@@ -36,7 +36,7 @@ In the above diagram, you can see the components and their relations (PostgreSQL
 |------|--------|---------|
 | <a name="module_gitlab_policy"></a> [gitlab\_policy](#module\_gitlab\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | v6.4.0 |
 | <a name="module_gitlab_role"></a> [gitlab\_role](#module\_gitlab\_role) | terraform-aws-modules/iam/aws//modules/iam-role | v6.4.0 |
-| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 4.1.0 |
+| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 5.10.0 |
 
 ## Resources
 
