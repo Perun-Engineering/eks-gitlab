@@ -70,6 +70,23 @@ EOF
     backup = true
   }
 
+  # Optional intraday "lean full" backup CronJob (db + repositories only; object-storage blobs
+  # skipped) in addition to the chart-managed nightly full. Disabled by default. The image tag is
+  # resolved automatically from the deployed chart's GitLab app version, so only `enabled` is
+  # required; the rest below are optional overrides shown with their defaults.
+  lean_backup = {
+    enabled = true
+
+    # schedule                = "0 6,12,18 * * *"
+    # concurrency_policy      = "Forbid"
+    # active_deadline_seconds = 2700
+    # tmp_storage_size        = "30Gi"
+    # skip = [
+    #   "registry", "uploads", "pages", "packages", "external_diffs",
+    #   "ci_secure_files", "lfs", "artifacts", "terraform_state",
+    # ]
+  }
+
   values = [
     templatefile("values.yaml", {
       database_host              = "gitlab.xxxxxxxxxxxx.eu-central-1.rds.amazonaws.com"

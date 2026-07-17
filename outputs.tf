@@ -15,3 +15,8 @@ output "buckets" {
     for k, v in module.s3_bucket : k => v.s3_bucket_arn
   })
 }
+
+output "lean_backup_cronjob_name" {
+  description = "Name of the lean backup CronJob, or null when lean_backup is disabled"
+  value       = var.lean_backup.enabled ? local.lean_name : null
+}

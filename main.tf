@@ -275,6 +275,46 @@ resource "helm_release" "gitlab" {
   ]
 }
 
+# Intraday "lean full" backup CronJob (db + repositories only). Cloned from the chart-managed
+# toolbox backup CronJob so its env/secrets/volumes stay faithful; only scheduling, resources and
+# the backup-utility --skip arguments differ. Created only when var.lean_backup.enabled is true.
+resource "kubectl_manifest" "lean_backup" {
+  count = var.lean_backup.enabled ? 1 : 0
+
+  yaml_body = templatefile("${path.module}/templates/lean-backup-cronjob.yaml.tpl", {
+    cronjob_name                  = local.lean_name
+    namespace                     = local.release_namespace
+    release_name                  = var.release_name
+    bucket_prefix                 = var.bucket_prefix
+    schedule                      = local.lean.schedule
+    concurrency_policy            = local.lean.concurrency_policy
+    restart_policy                = local.lean.restart_policy
+    active_deadline_seconds       = local.lean.active_deadline_seconds
+    backoff_limit                 = local.lean.backoff_limit
+    successful_jobs_history_limit = local.lean.successful_jobs_history_limit
+    failed_jobs_history_limit     = local.lean.failed_jobs_history_limit
+    ttl_seconds_after_finished    = local.lean.ttl_seconds_after_finished
+    tmp_storage_size              = local.lean.tmp_storage_size
+    backup_command                = local.lean_backup_command
+    toolbox_image                 = local.lean_toolbox_image
+    certificates_image            = local.lean_certificates_image
+    configure_image               = local.lean_configure_image
+    service_account               = local.lean_service_account
+    rails_secret_name             = local.lean_rails_secret_name
+    node_selector_yaml            = local.lean_node_selector_yaml
+    tolerations_yaml              = local.lean_tolerations_yaml
+    pod_annotations_yaml          = local.lean_pod_annotations_yaml
+    resources_yaml                = local.lean_resources_yaml
+  })
+
+  server_side_apply = true
+  wait              = false
+
+  # The chart-generated secrets/configmaps the CronJob projects must exist first; the release also
+  # supplies the app version used to tag the images.
+  depends_on = [helm_release.gitlab]
+}
+
 module "gitlab_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "v6.4.0"
