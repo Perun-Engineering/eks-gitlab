@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.3.0...v0.4.0) (2026-07-20)
+
+
+### Features
+
+* Optional lean backup cronjob ([23cfedc](https://github.com/Perun-Engineering/eks-gitlab/commit/23cfedc9733c0ad4f766147fbf7975594778e406))
+
+
+### Bug Fixes
+
+* Pre-commit ([c66bc9b](https://github.com/Perun-Engineering/eks-gitlab/commit/c66bc9b42f9da3bc107f60d4a0143b7246055c08))
+
 ## [0.2.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.1.0...v0.2.0) (2026-02-23)
 
 
