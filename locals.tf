@@ -95,26 +95,22 @@ locals {
     "logging/type"                                   = "gitlab"
   }, local.lean.pod_annotations)
 
-  # The chart's toolbox projects one omniauth secret per configured provider; mirror that instead of
-  # assuming a single provider, so single- and multi-provider installs both render correctly. The
-  # item key follows the chart (`key`, default "provider"), which is the key gitlab_omniauth_providers
-  # writes.
-  lean_omniauth_sources = [
-    for p in try(local.app_config.omniauth.providers, []) : {
+  # Caller-supplied projections appended to the pod's projected secret volume. The release mounts
+  # some secrets one file at a time and fails to render its config when an expected file is absent,
+  # so the set is passed in rather than assumed - one entry, several, or none all render correctly.
+  lean_extra_secret_projections = [
+    for s in local.lean.extra_secret_projections : {
       secret = {
-        name = p.secret
-        items = [{
-          key  = try(p.key, "provider")
-          path = "omniauth/${p.secret}/${try(p.key, "provider")}"
-        }]
+        name  = s.secret_name
+        items = [{ key = s.key, path = s.path }]
       }
     }
   ]
 
   # Pre-indented YAML fragments injected into the CronJob template.
-  lean_omniauth_sources_yaml = length(local.lean_omniauth_sources) > 0 ? indent(14, trimspace(yamlencode(local.lean_omniauth_sources))) : ""
-  lean_node_selector_yaml    = indent(12, trimspace(yamlencode(local.lean.node_selector)))
-  lean_tolerations_yaml      = indent(12, trimspace(yamlencode(local.lean_tolerations)))
-  lean_pod_annotations_yaml  = indent(12, trimspace(yamlencode(local.lean_pod_annotations)))
-  lean_resources_yaml        = indent(14, trimspace(yamlencode(local.lean.resources)))
+  lean_extra_sources_yaml   = length(local.lean_extra_secret_projections) > 0 ? indent(14, trimspace(yamlencode(local.lean_extra_secret_projections))) : ""
+  lean_node_selector_yaml   = indent(12, trimspace(yamlencode(local.lean.node_selector)))
+  lean_tolerations_yaml     = indent(12, trimspace(yamlencode(local.lean_tolerations)))
+  lean_pod_annotations_yaml = indent(12, trimspace(yamlencode(local.lean_pod_annotations)))
+  lean_resources_yaml       = indent(14, trimspace(yamlencode(local.lean.resources)))
 }

@@ -303,7 +303,7 @@ spec:
                   - key: connection
                     path: objectstorage/ci_secure_files
                   name: ${release_name}-rails-storage
-              ${omniauth_sources_yaml}
+              ${extra_sources_yaml}
           - name: toolbox-secrets
             emptyDir:
               medium: Memory

@@ -132,17 +132,27 @@ variable "lean_backup" {
     appVersion, or `global.gitlabVersion` if set) — so there is no image version to maintain here.
     Supply the full `*_image` fields only to override. `name` defaults to
     "<release_name>-toolbox-backup-lean" and `service_account_name` to "<release_name>-toolbox".
+
+    `extra_secret_projections` appends entries to the pod's projected secret volume, for secrets the
+    chart mounts one file at a time and whose set the module cannot infer. Each entry projects
+    `secret_name`'s `key` at `path`, relative to the config directory. The pod fails to render its
+    config when a file the release expects is absent, so pass the complete set.
   EOT
 
   type = object({
-    enabled                       = optional(bool, false)
-    schedule                      = optional(string, "0 6,12,18 * * *")
-    name                          = optional(string, null)
-    toolbox_image                 = optional(string, null)
-    certificates_image            = optional(string, null)
-    configure_image               = optional(string, null)
-    service_account_name          = optional(string, null)
-    rails_secret_name             = optional(string, null)
+    enabled              = optional(bool, false)
+    schedule             = optional(string, "0 6,12,18 * * *")
+    name                 = optional(string, null)
+    toolbox_image        = optional(string, null)
+    certificates_image   = optional(string, null)
+    configure_image      = optional(string, null)
+    service_account_name = optional(string, null)
+    rails_secret_name    = optional(string, null)
+    extra_secret_projections = optional(list(object({
+      secret_name = string
+      key         = string
+      path        = string
+    })), [])
     concurrency_policy            = optional(string, "Forbid")
     restart_policy                = optional(string, "Never")
     active_deadline_seconds       = optional(number, 2700)
