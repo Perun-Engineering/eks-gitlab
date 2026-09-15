@@ -2,7 +2,7 @@
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.11.0 |
@@ -17,7 +17,7 @@ No providers.
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_gitlab"></a> [gitlab](#module\_gitlab) | ../ | n/a |
 
 ## Resources
