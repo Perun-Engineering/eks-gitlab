@@ -303,11 +303,7 @@ spec:
                   - key: connection
                     path: objectstorage/ci_secure_files
                   name: ${release_name}-rails-storage
-              - secret:
-                  items:
-                  - key: provider
-                    path: omniauth/gitlab-google-oauth2/provider
-                  name: gitlab-google-oauth2
+              ${omniauth_sources_yaml}
           - name: toolbox-secrets
             emptyDir:
               medium: Memory

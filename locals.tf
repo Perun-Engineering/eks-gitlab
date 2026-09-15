@@ -95,9 +95,26 @@ locals {
     "logging/type"                                   = "gitlab"
   }, local.lean.pod_annotations)
 
+  # The chart's toolbox projects one omniauth secret per configured provider; mirror that instead of
+  # assuming a single provider, so single- and multi-provider installs both render correctly. The
+  # item key follows the chart (`key`, default "provider"), which is the key gitlab_omniauth_providers
+  # writes.
+  lean_omniauth_sources = [
+    for p in try(local.app_config.omniauth.providers, []) : {
+      secret = {
+        name = p.secret
+        items = [{
+          key  = try(p.key, "provider")
+          path = "omniauth/${p.secret}/${try(p.key, "provider")}"
+        }]
+      }
+    }
+  ]
+
   # Pre-indented YAML fragments injected into the CronJob template.
-  lean_node_selector_yaml   = indent(12, trimspace(yamlencode(local.lean.node_selector)))
-  lean_tolerations_yaml     = indent(12, trimspace(yamlencode(local.lean_tolerations)))
-  lean_pod_annotations_yaml = indent(12, trimspace(yamlencode(local.lean_pod_annotations)))
-  lean_resources_yaml       = indent(14, trimspace(yamlencode(local.lean.resources)))
+  lean_omniauth_sources_yaml = length(local.lean_omniauth_sources) > 0 ? indent(14, trimspace(yamlencode(local.lean_omniauth_sources))) : ""
+  lean_node_selector_yaml    = indent(12, trimspace(yamlencode(local.lean.node_selector)))
+  lean_tolerations_yaml      = indent(12, trimspace(yamlencode(local.lean_tolerations)))
+  lean_pod_annotations_yaml  = indent(12, trimspace(yamlencode(local.lean_pod_annotations)))
+  lean_resources_yaml        = indent(14, trimspace(yamlencode(local.lean.resources)))
 }
