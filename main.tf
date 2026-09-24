@@ -305,6 +305,7 @@ resource "kubectl_manifest" "lean_backup" {
     tolerations_yaml              = local.lean_tolerations_yaml
     pod_annotations_yaml          = local.lean_pod_annotations_yaml
     resources_yaml                = local.lean_resources_yaml
+    extra_sources_yaml            = local.lean_extra_sources_yaml
   })
 
   server_side_apply = true
