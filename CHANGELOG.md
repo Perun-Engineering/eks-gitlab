@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.5.0...v0.6.0) (2026-11-02)
+
+
+### Features
+
+* Move to helm provider 3.x and alekc/kubectl 3.x ([c40541c](https://github.com/Perun-Engineering/eks-gitlab/commit/c40541ccb9a0fa9769edaae42d4ae1397e79859f))
+
 ## [0.5.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.4.0...v0.5.0) (2026-09-24)
 
 
