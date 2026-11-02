@@ -66,7 +66,7 @@ locals {
   # chart's `gitlab.versionTag` helper: take `global.gitlabVersion` if set, else the chart appVersion
   # exposed by the deployed helm_release, and prepend "v" when it is a plain semver (branch-name
   # versions are used verbatim). Repositories come from `values`; full `*_image` overrides win.
-  lean_app_version = coalesce(try(local.values.global.gitlabVersion, null), try(helm_release.gitlab.metadata[0].app_version, ""))
+  lean_app_version = coalesce(try(local.values.global.gitlabVersion, null), try(helm_release.gitlab.metadata.app_version, ""))
   lean_image_tag   = can(regex("^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$", local.lean_app_version)) ? "v${local.lean_app_version}" : local.lean_app_version
 
   lean_toolbox_image      = coalesce(local.lean.toolbox_image, "${try(local.values.gitlab.toolbox.image.repository, "")}:${local.lean_image_tag}")

@@ -52,8 +52,8 @@ config expects, otherwise it fails to start.
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0 |
-| <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.11.0 |
-| <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | ~> 2.0 |
+| <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 3.0, < 4.0 |
+| <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 3.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.20 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.9 |
 
@@ -61,10 +61,10 @@ config expects, otherwise it fails to start.
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.64.0 |
-| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.11.0 |
-| <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | 2.4.1 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 3.2.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.71.0 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | 3.3.0 |
+| <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | 3.0.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 3.4.0 |
 
 ## Modules
 
@@ -78,7 +78,7 @@ config expects, otherwise it fails to start.
 
 | Name | Type |
 | ---- | ---- |
-| [helm_release.gitlab](https://registry.terraform.io/providers/hashicorp/helm/2.11.0/docs/resources/release) | resource |
+| [helm_release.gitlab](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [kubectl_manifest.lean_backup](https://registry.terraform.io/providers/alekc/kubectl/latest/docs/resources/manifest) | resource |
 | [kubernetes_namespace_v1.gitlab](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace_v1) | resource |
 | [kubernetes_secret_v1.gitlab_omniauth_providers](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret_v1) | resource |
