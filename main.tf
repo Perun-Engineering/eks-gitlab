@@ -257,15 +257,18 @@ resource "helm_release" "gitlab" {
   version     = var.gitlab_chart_version
   values      = var.values
 
-  set {
-    name  = "global.smtp.user_name"
-    value = var.smtp_user
-  }
-
-  set {
-    name  = "global.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.gitlab_role.arn
-  }
+  # Order matches the state helm 2.x left behind (its set block was hash-ordered),
+  # so the upgrade does not show a spurious reorder.
+  set = [
+    {
+      name  = "global.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = module.gitlab_role.arn
+    },
+    {
+      name  = "global.smtp.user_name"
+      value = var.smtp_user
+    },
+  ]
 
   depends_on = [
     kubernetes_secret_v1.postgres,
