@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.6.0...v0.7.0) (2026-11-16)
+
+
+### Features
+
+* stop managing in-cluster GitLab resources, keep S3 and IAM ([4106451](https://github.com/Perun-Engineering/eks-gitlab/commit/41064513fea245fd0c010fe1c11bc02bfcf5bcbd))
+
 ## [0.6.0](https://github.com/Perun-Engineering/eks-gitlab/compare/v0.5.0...v0.6.0) (2026-11-02)
 
 
